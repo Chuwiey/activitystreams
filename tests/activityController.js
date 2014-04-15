@@ -7,6 +7,17 @@ var nock = require('nock');
 
 describe('Test Activity Controller  ', function () {
 
+    beforeEach(function(done) {
+        // testEndpoint Auth Policy Setup
+        var testEndpoint = {
+            host: 'localhost',
+            port: 9005,
+            path: '/fakeSession=%s',
+            sessionCookie: 'fakeSession'
+        };
+        sails.config.authPolicy.endpoint = testEndpoint;
+        done();
+    });
 
     describe('Test GET Actions', function() {
 
@@ -34,15 +45,7 @@ describe('Test Activity Controller  ', function () {
 
         it('should reject post activity with an unauthroized user ',  function (done) {
 
-            var testEndpoint = {
-                host: 'localhost',
-                port: 6969,
-                path: '/fakeSession=%s',
-                sessionCookie: 'fakeSession'
-            };
-            sails.config.authPolicy.endpoint = testEndpoint;
-
-            var authService = nock('https://localhost:6969')
+            var authService = nock('https://localhost:9005')
                 .get('/fakeSession=fake')
                 .reply(401, {});
 
@@ -58,15 +61,7 @@ describe('Test Activity Controller  ', function () {
 
         it('POST: /activity {activity} (postSpecificActivity)', function(done) {
 
-            var testEndpoint = {
-                host: 'localhost',
-                port: 6969,
-                path: '/fakeSession=%s',
-                sessionCookie: 'fakeSession'
-            };
-            sails.config.authPolicy.endpoint = testEndpoint;
-
-            var authService = nock('https://localhost:6969')
+            var authService = nock('https://localhost:9005')
                 .get('/fakeSession=fake')
                 .reply(200, {userId: 1121});
 
@@ -84,16 +79,7 @@ describe('Test Activity Controller  ', function () {
     describe('Test DELETE Actions', function() {
 
         it('should reject del activity with an unauthroized user', function(done) {
-
-            var testEndpoint = {
-                host: 'localhost',
-                port: 6969,
-                path: '/fakeSession=%s',
-                sessionCookie: 'fakeSession'
-            };
-            sails.config.authPolicy.endpoint = testEndpoint;
-
-            var authService = nock('https://localhost:6969')
+            var authService = nock('https://localhost:9005')
                 .get('/fakeSession=fake')
                 .reply(401, {msg: 'noob'});
 
@@ -107,15 +93,7 @@ describe('Test Activity Controller  ', function () {
 
         it('DELETE: /activity/{appname_model}/{id}/{verb}/{appname_model}/{id} (deleteSpecificActivity)', function(done) {
 
-            var testEndpoint = {
-                host: 'localhost',
-                port: 6969,
-                path: '/fakeSession=%s',
-                sessionCookie: 'fakeSession'
-            };
-            sails.config.authPolicy.endpoint = testEndpoint;
-
-            var authService = nock('https://localhost:6969')
+            var authService = nock('https://localhost:9005')
                 .get('/fakeSession=fake')
                 .reply(200, {userId: 1121});
 
